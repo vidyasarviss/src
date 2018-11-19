@@ -5,6 +5,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
+
 
 /**
  * Warehouses Model
@@ -39,7 +41,8 @@ class WarehousesTable extends Table
 
         $this->hasMany('StockTransactions', [
             'foreignKey' => 'warehouse_id',
-            
+              'dependent'  => true,
+            'cascadeCallbacks' => true
         ]);
     }
 
@@ -63,4 +66,19 @@ class WarehousesTable extends Table
 
         return $validator;
     }
+    public function beforeSave($event, $entity, $options)
+{
+    //debug($entity);die();
+            $warehouse_table = TableRegistry::get('Warehouses'); 
+            if(is_null($entity->id)){
+                $warehouse=$warehouse_table->find('list')->where(['name' =>$entity->name])->count();
+            }else{
+            $warehouse=$warehouse_table->find('list')->where(['name'=>$entity->name,'id !=' =>$entity->id])->count();
+            }
+            if($warehouse > 0)
+            {
+            return false;
+            }
+            
+} 
 }

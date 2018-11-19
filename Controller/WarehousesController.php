@@ -37,7 +37,8 @@ class WarehousesController extends AppController
         $warehouse = $this->Warehouses->get($id, [
             'contain' => ['StockTransactions']
         ]);
-
+        
+		
         $this->set('warehouse', $warehouse);
     }
 

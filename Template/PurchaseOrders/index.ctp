@@ -23,7 +23,6 @@
                 <th scope="col"><?= $this->Paginator->sort('supplier_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('transaction_date') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('required_date') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('type') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -34,7 +33,6 @@
                 <td><?= $purchaseOrder->has('supplier') ? $this->Html->link($purchaseOrder->supplier->name, ['controller' => 'Suppliers', 'action' => 'view', $purchaseOrder->supplier->id]) : '' ?></td>
                 <td><?= h($purchaseOrder->transaction_date) ?></td>
                 <td><?= h($purchaseOrder->required_date) ?></td>
-                <td><?= $this->Number->format($purchaseOrder->type) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $purchaseOrder->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $purchaseOrder->id]) ?>

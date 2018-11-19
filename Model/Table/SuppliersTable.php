@@ -5,6 +5,8 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
+
 
 /**
  * Suppliers Model
@@ -38,7 +40,9 @@ class SuppliersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->hasMany('PurchaseOrders', [
-            'foreignKey' => 'supplier_id'
+            'foreignKey' => 'supplier_id',
+             'dependent'  => true,
+            'cascadeCallbacks' => true
         ]);
     }
 
@@ -62,4 +66,19 @@ class SuppliersTable extends Table
 
         return $validator;
     }
+public function beforeSave($event, $entity, $options)
+{
+    //debug($entity);die();
+            $supplier_table = TableRegistry::get('Suppliers'); 
+            if(is_null($entity->id)){
+                $supplier=$supplier_table->find('list')->where(['name' =>$entity->name])->count();
+            }else{
+            $supplier=$supplier_table->find('list')->where(['name'=>$entity->name,'id !=' =>$entity->id])->count();
+            }
+            if($supplier > 0)
+            {
+            return false;
+            }
+            
+} 
 }

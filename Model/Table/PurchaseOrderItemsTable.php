@@ -99,7 +99,7 @@ class PurchaseOrderItemsTable extends Table
     {
         $rules->add($rules->existsIn(['item_id'], 'Items'));
         $rules->add($rules->existsIn(['unit_id'], 'Units'));
-        $rules->add($rules->existsIn(['purchase_order_id'], 'PurchaseOrder'));
+       // $rules->add($rules->existsIn(['purchase_order_id'], 'PurchaseOrders'));
         $rules->add($rules->existsIn(['warehouse_id'], 'Warehouses'));
 
         return $rules;

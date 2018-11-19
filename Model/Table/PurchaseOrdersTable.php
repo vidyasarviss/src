@@ -42,7 +42,9 @@ class PurchaseOrdersTable extends Table
             'foreignKey' => 'supplier_id'
         ]);
         $this->hasMany('PurchaseOrderItems', [
-            'foreignKey' => 'purchase_order_id'
+            'foreignKey' => 'purchase_order_id',
+             'dependent'  => true,
+            'cascadeCallbacks' => true
         ]);
     }
 

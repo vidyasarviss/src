@@ -28,10 +28,7 @@
             <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($purchaseOrder->id) ?></td>
         </tr>
-        <tr>
-            <th scope="row"><?= __('Type') ?></th>
-            <td><?= $this->Number->format($purchaseOrder->type) ?></td>
-        </tr>
+       
         <tr>
             <th scope="row"><?= __('Transaction Date') ?></th>
             <td><?= h($purchaseOrder->transaction_date) ?></td>
@@ -49,27 +46,21 @@
                 <th scope="col"><?= __('Id') ?></th>
                 <th scope="col"><?= __('Item Id') ?></th>
                 <th scope="col"><?= __('Unit Id') ?></th>
-                <th scope="col"><?= __('Purchase Order Id') ?></th>
                 <th scope="col"><?= __('Quantity') ?></th>
                 <th scope="col"><?= __('Rate') ?></th>
                 <th scope="col"><?= __('Warehouse Id') ?></th>
                 <th scope="col"><?= __('Amount') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($purchaseOrder->purchase_order_items as $purchaseOrderItems): ?>
             <tr>
                 <td><?= h($purchaseOrderItems->id) ?></td>
-                <td><?= h($purchaseOrderItems->item_id) ?></td>
-                <td><?= h($purchaseOrderItems->unit_id) ?></td>
-                <td><?= h($purchaseOrderItems->purchase_order_id) ?></td>
+                <td><?= h($purchaseOrderItems->item_name) ?></td>
+                <td><?= h($purchaseOrderItems->unit_name) ?></td>
                 <td><?= h($purchaseOrderItems->quantity) ?></td>
                 <td><?= h($purchaseOrderItems->rate) ?></td>
-                <td><?= h($purchaseOrderItems->warehouse_id) ?></td>
+                <td><?= h($purchaseOrderItems->warehouse_name) ?></td>
                 <td><?= h($purchaseOrderItems->amount) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'PurchaseOrderItems', 'action' => 'view', $purchaseOrderItems->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'PurchaseOrderItems', 'action' => 'edit', $purchaseOrderItems->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'PurchaseOrderItems', 'action' => 'delete', $purchaseOrderItems->id], ['confirm' => __('Are you sure you want to delete # {0}?', $purchaseOrderItems->id)]) ?>
+                 
                 </td>
             </tr>
             <?php endforeach; ?>

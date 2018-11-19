@@ -66,9 +66,9 @@
     <td><select name="units[]" id=unit-id'+(no_of_rows)+'>'+unit_options+'</select></td>\
     </tr>';
     }
+    
   function change(element) 
 	{
-	
 	//console.log("bbb");
 	var item_select_box=document.getElementById(element.id);
 	
