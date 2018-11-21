@@ -41,7 +41,7 @@
     <div class="related">
         <h4><?= __('Related Purchase Order Items') ?></h4>
         <?php if (!empty($purchaseOrder->purchase_order_items)): ?>
-        <table cellpadding="0" cellspacing="0">
+        <table  cellpadding="0" cellspacing="0" id='viewTable' >
             <tr>
                 <th scope="col"><?= __('Id') ?></th>
                 <th scope="col"><?= __('Item Id') ?></th>
@@ -51,20 +51,50 @@
                 <th scope="col"><?= __('Warehouse Id') ?></th>
                 <th scope="col"><?= __('Amount') ?></th>
             </tr>
-            <?php foreach ($purchaseOrder->purchase_order_items as $purchaseOrderItems): ?>
+            
+            <?php 
+            $index = 1;
+            foreach ($purchaseOrder->purchase_order_items as $purchaseOrderItems):
+            $quantity = 'quantity_id'.$index;
+            $rate = 'rate_id'.$index;
+            $amount = 'amount_id'.$index;
+            ?>
+            
             <tr>
                 <td><?= h($purchaseOrderItems->id) ?></td>
                 <td><?= h($purchaseOrderItems->item_name) ?></td>
                 <td><?= h($purchaseOrderItems->unit_name) ?></td>
-                <td><?= h($purchaseOrderItems->quantity) ?></td>
-                <td><?= h($purchaseOrderItems->rate) ?></td>
+                <td id="<?php echo $quantity; ?>"><?= h($purchaseOrderItems->quantity) ?></td>
+                <td id="<?php echo $rate; ?>"><?= h($purchaseOrderItems->rate) ?></td>
                 <td><?= h($purchaseOrderItems->warehouse_name) ?></td>
-                <td><?= h($purchaseOrderItems->amount) ?></td>
-                 
-                </td>
+                <td id="<?php echo $amount; ?>"><?= h($purchaseOrderItems->amount) ?></td>
             </tr>
+            
+            <?php
+            $index++;
+            ?>
+            
             <?php endforeach; ?>
         </table>
         <?php endif; ?>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+ <script>
+ 
+ 	function do_onload()
+ 	{
+        var smCount = $('#viewTable tr').length;
+        console.log('afasfasf111111 ', smCount);        
+        for(var i=1; i<smCount;i++){
+            console.log("iiiiii ", $('#quantity'+i));
+            var qty = $('#quantity_id'+i).text();
+			var rate = $('#rate_id'+i).text();
+			var amount = parseFloat(qty) * parseFloat(rate);
+			$('#amount_id'+i).text(amount);
+            console.log(amount,qty,rate);            
+		}
+	}
+		
+		window.onload = do_onload();
+ </script>

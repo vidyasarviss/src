@@ -84,7 +84,7 @@ class PurchaseOrdersController extends AppController
                     $purchase_order_item->unit_id= $data['units'][$i];	 
                     $purchase_order_item->quantity= $data['qty'][$i];
                     $purchase_order_item->rate= $data['rate'][$i];
-                    $purchase_order_item->amount= $data['amount'][$i];
+                    //$purchase_order_item->amount= $data['amount'][$i];
                     $purchase_order_item->warehouse_id= $data['warehouses'][$i];
 	                $po_table->save($purchase_order_item);
 	                $i++;                         
@@ -96,7 +96,7 @@ class PurchaseOrdersController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            
+            debug($purchase_order->errors());die();
             $units = TableRegistry::get('Units');
             $this->set('units',$units->find('list'));
             
@@ -152,7 +152,7 @@ class PurchaseOrdersController extends AppController
                  	    $purchase_order_item->quantity= $data['qty'][$i];
 			    		$purchase_order_item->rate= $data['rate'][$i]; 
 			    		$purchase_order_item->warehouse_id= $data['warehouses'][$i]; 
-			    		$purchase_order_item->amount= $data['amount'][$i]; 
+			    		//$purchase_order_item->amount= $data['amount'][$i]; 
                  	    $po_table->save($purchase_order_item);
                  	}else{
                      	$purchase_order_item = $po_table->newEntity();
@@ -162,11 +162,11 @@ class PurchaseOrdersController extends AppController
                  		$purchase_order_item->quantity= $data['qty'][$i];
 						$purchase_order_item->rate= $data['rate'][$i]; 
 						$purchase_order_item->warehouse_id= $data['warehouses'][$i]; 
-						$purchase_order_item->amount= $data['amount'][$i]; 
+						//$purchase_order_item->amount= $data['amount'][$i]; 
                  		$po_table->save($purchase_order_item);
-                 		$i++;
+                 		
                  	}
-                 	
+                 	$i++;
                  	}
                 $this->Flash->success(__('The purchase order has been saved.'));
 
@@ -178,8 +178,8 @@ class PurchaseOrdersController extends AppController
              $items = TableRegistry::get('Items');
              $this->set('items',$items->find('list'));
              
-            $warehouses = TableRegistry::get('Warehouses');
-            $this->set('warehouses',$warehouses->find('list'));
+             $warehouses = TableRegistry::get('Warehouses');
+             $this->set('warehouses',$warehouses->find('list'));
             
             $this->Flash->error(__('The purchase order could not be saved. Please, try again.'));
         }
@@ -190,6 +190,7 @@ class PurchaseOrdersController extends AppController
              
              $items = TableRegistry::get('Items');
              $this->set('items',$items->find('list'));
+             
              $warehouses = TableRegistry::get('Warehouses');
             $this->set('warehouses',$warehouses->find('list'));
              
@@ -252,7 +253,7 @@ class PurchaseOrdersController extends AppController
   $Purchase_order_items_table = TableRegistry::get('Purchase_order_items');
  	 foreach($pid['purchase_order_itemid'] as $id)
   	{
-      $pstatus = $Purchase_order_items->get($id);
+      $pstatus = $Purchase_order_items_table->get($id);
       $Purchase_order_items_table->delete($pstatus);
   
  	 }

@@ -10,8 +10,7 @@
         <li><?= $this->Html->link(__('New Purchase Order'), ['action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Suppliers'), ['controller' => 'Suppliers', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Supplier'), ['controller' => 'Suppliers', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Purchase Order Items'), ['controller' => 'PurchaseOrderItems', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Purchase Order Item'), ['controller' => 'PurchaseOrderItems', 'action' => 'add']) ?></li>
+        
     </ul>
 </nav>
 <div class="purchaseOrders index large-9 medium-8 columns content">

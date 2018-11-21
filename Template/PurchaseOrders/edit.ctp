@@ -39,12 +39,12 @@
     ?>
     <tr>
     <td><?php echo $this->Form->control('checkbox',array('type'=>'checkbox','name'=>'chk[]','id'=>$purchaseOrderItems->id));?></td>
-    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items, 'name'=>'items[]','onchange'=>'change(this)'));?></td>
-    <td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units, 'name'=>'units[]')); ?></td>
-    <td><?php echo $this->Form->control('quantity', array('name'=>'qty[]','default'=>$purchaseOrderItems->quantity,'required'=>'true')); ?></td>
-    <td><?php echo $this->Form->control('rate',array('name'=>'rate[]','default'=>$purchaseOrderItems->rate,'required'=>'true')); ?></td>
-    <td><?php echo $this->Form->control('warehouse_id',array('type'=>'select','options'=>$warehouses, 'name'=>'warehouses[]')); ?></td>
-    <td><?php echo $this->Form->control('amount',array('name'=>'amount[]','default'=>$purchaseOrderItems->rate)); ?></td>
+    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items,'default'=>$purchaseOrderItems->item_id,'name'=>'items[]','onchange'=>'change(this)'));?></td>
+    <td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units,'default'=>$purchaseOrderItems->item_id,'name'=>'units[]')); ?></td>
+    <td><?php echo $this->Form->control('quantity', array('type'=>'number','name'=>'qty[]','required'=>'true','onchange'=>'calculate_amount(this)','default'=>$purchaseOrderItems->quantity)); ?></td>
+    <td><?php echo $this->Form->control('rate',array('type'=>'number','name'=>'rate[]','required'=>'true','onchange'=>'calculate_amount(this)','default'=>$purchaseOrderItems->rate)); ?></td>
+    <td><?php echo $this->Form->control('warehouse_id',array('type'=>'select','options'=>$warehouses, 'default'=>$purchaseOrderItems->warehouse_id,'name'=>'warehouses[]')); ?></td>
+    <td><span id='amount'></span></td>
     </tr>
     
     <?php
@@ -88,24 +88,27 @@
     <td><input type="checkbox" name="chk[]" id=chk'+(rowCount+1)+'></td>\
     <td><select name="items[]" onchange="change(this)" id=item-id'+(no_of_rows)+'>'+item_options+'</select></td>\
     <td><select name="units[]" id=unit-id'+(no_of_rows)+'>'+unit_options+'</select></td>\
-    <td><?php echo $this->Form->control(' ',  array('name'=>'qty[]')); ?></td>\
-    <td><?php echo $this->Form->control(' ',  array('name'=>'rate[]')); ?></td>\
+    <td><input type="number" name="qty[]" id=quantity-id'+(no_of_rows)+' onchange="calculate_amount(this)"></td>\
+    <td><input type="number" name="rate[]" id=rate-id'+(no_of_rows)+' onchange="calculate_amount(this)"></td>\
     <td><?php echo $this->Form->control(' ',array('type'=>'select','options'=>$warehouses, 'name'=>'warehouses[]')); ?></td>\
-    <td><?php echo $this->Form->control(' ',  array('name'=>'amount[]')); ?></td>\
+    <td><span id=amount'+(no_of_rows)+'></span></td>\
     </tr>';
+    
+    var item_select_box = document.getElementById('item-id'+no_of_rows);
+    change(item_select_box);
     }
     
 function change(element) 
 	{
 	
-	//console.log("bbb");
+	console.log("bbb");
 	var item_select_box=document.getElementById(element.id);
 	
 	//this will give the selected dropdown value,tht is item id
 	
 	var selected_value=item_select_box.options[item_select_box.selectedIndex].value;
-	console.log(selected_value);
-	current_row=element.id[element.id.length -1];
+    console.log(selected_value);
+	current_row=element.id[element.id.length -1]
 	
 	console.log(current_row);
 	
@@ -151,7 +154,7 @@ function change(element)
 	}
 	function check()
 	{
-		var purchase_order_item_dlt=$('#purchase_order_item-id');
+		var puchase_order_item_dlt=$('#puchase_order_item-id');
 		var check_box=document.getElementsByName("chk[]");
 		var checkbox_id = new Array();
 		$("input[name='chk[]']:checked").each(function(){
@@ -161,7 +164,7 @@ function change(element)
 				var isnum = /^\d+$/.test($(this).attr('id'));				
 				if(!isnum)
 				{				
-					chkid.closest('tr').remove();
+					chkid.closest("tr").remove();
 				}
 				else{
 				   checkbox_id.push($(this).attr('id'));
@@ -200,6 +203,40 @@ function change(element)
 	});
 	//console.log(chkid);
 	}
-	
 	}
+	function calculate_amount(element){     
+	var input_box = document.getElementById(element.id);
+	console.log("element ",input_box);
+	
+	//var rate_box = document.getElementById("rate"+1);
+	//console.log("rate_box");
+	//substring qty.id, get last number
+		current_row = element.id[element.id.length -1]
+		console.log("current_row ",current_row); 	
+	if(current_row == "y" || current_row == "e"){
+		var rate_box = "";
+		if(current_row == "y"){
+			var rate_box = document.getElementById("rate");
+			var amount = input_box.value * rate_box.value;
+			console.log("rrrrrrr ",rate_box.value);
+		}else{
+			var qty_box = document.getElementById("quantity");
+			var amount = input_box.value * qty_box.value;
+		}    
+		console.log("hjhjhjh ", amount);
+		$('#amount').html(amount); 
+	}else{
+		console.log("in else");
+		current_row = element.id[element.id.length -1]
+		console.log("current_row ",current_row); 
+
+		var qty_box = document.getElementById("quantity-id"+current_row);
+		var rate_box = document.getElementById("rate-id"+current_row);
+		var amount = qty_box.value * rate_box.value;
+		console.log(amount);
+		$('#amount'+current_row).html(amount);
+	}
+	
+}
+	
 	</script>

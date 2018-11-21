@@ -65,3 +65,22 @@
         <?php endif; ?>
     </div>
 </div>
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+ <script>
+ 	function do_onload()
+ 	{
+ 		var poCount = $('#viewTable tr').length;
+ 		console.log('cvcbhvbvbj',poCount);
+ 		for(var i=1; i<poCount; i++)
+ 		{
+ 		console.log("hhhhhhhhhhhhhh",$('#quantity'+i));
+ 		var qty = $('#quantity_id'+i).text();
+ 		var rate = $('#rate_id'+i).text();
+ 		var amount = pareseFloat(qty) * parseFloat(rate);
+	 	$('#amount_id'+i).text(amount);
+ 		console.log(amount,qty,rate);
+ 		}
+ 	}
+ 	window.onload = do_load();
+ </script>
