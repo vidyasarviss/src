@@ -127,7 +127,7 @@
 		}
 		
 	});	
-     //console.log(item-id);
+    console.log(item-id);
 	}
 	
 	function calculate_amount(element){     
