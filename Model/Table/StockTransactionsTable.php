@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
  * StockTransactions Model
  *
  * @property \App\Model\Table\ItemsTable|\Cake\ORM\Association\BelongsTo $Items
+ * @property \App\Model\Table\UnitsTable|\Cake\ORM\Association\BelongsTo $Units
  * @property \App\Model\Table\WarehousesTable|\Cake\ORM\Association\BelongsTo $Warehouses
  *
  * @method \App\Model\Entity\StockTransaction get($primaryKey, $options = [])
@@ -42,6 +43,10 @@ class StockTransactionsTable extends Table
             'foreignKey' => 'item_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('Units', [
+            'foreignKey' => 'unit_id',
+            'joinType' => 'INNER'
+        ]);
         $this->belongsTo('Warehouses', [
             'foreignKey' => 'warehouse_id',
             'joinType' => 'INNER'
@@ -61,14 +66,19 @@ class StockTransactionsTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
+            ->integer('type')
+            ->requirePresence('type', 'create')
+            ->notEmpty('type');
+
+        $validator
             ->integer('quantity')
             ->requirePresence('quantity', 'create')
             ->notEmpty('quantity');
 
         $validator
-            ->integer('type')
-            ->requirePresence('type', 'create')
-            ->notEmpty('type');
+            ->integer('rate')
+            ->requirePresence('rate', 'create')
+            ->notEmpty('rate');
 
         $validator
             ->date('transaction_date')
@@ -76,10 +86,9 @@ class StockTransactionsTable extends Table
             ->notEmpty('transaction_date');
 
         $validator
-            ->scalar('transaction_time')
-            ->maxLength('transaction_time', 45)
-            ->requirePresence('transaction_time', 'create')
-            ->notEmpty('transaction_time');
+            ->integer('referenceid')
+            ->requirePresence('referenceid', 'create')
+            ->notEmpty('referenceid');
 
         return $validator;
     }
@@ -94,6 +103,7 @@ class StockTransactionsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['item_id'], 'Items'));
+        $rules->add($rules->existsIn(['unit_id'], 'Units'));
         $rules->add($rules->existsIn(['warehouse_id'], 'Warehouses'));
 
         return $rules;

@@ -7,15 +7,19 @@ use Cake\ORM\Entity;
  * StockTransaction Entity
  *
  * @property int $id
- * @property string $item_id
+ * @property int $item_id
+ * @property int $unit_id
  * @property int $warehouse_id
- * @property int $quantity
  * @property int $type
+ * @property int $quantity
+ * @property int $rate
  * @property \Cake\I18n\FrozenDate $transaction_date
- * @property string $transaction_time
+ * @property int $referenceid
  *
  * @property \App\Model\Entity\Item $item
+ * @property \App\Model\Entity\Unit $unit
  * @property \App\Model\Entity\Warehouse $warehouse
+ * @property \App\Model\Entity\Reference $reference
  */
 class StockTransaction extends Entity
 {
@@ -31,12 +35,16 @@ class StockTransaction extends Entity
      */
     protected $_accessible = [
         'item_id' => true,
+        'unit_id' => true,
         'warehouse_id' => true,
-        'quantity' => true,
         'type' => true,
+        'quantity' => true,
+        'rate' => true,
         'transaction_date' => true,
-        'transaction_time' => true,
+        'referenceid' => true,
         'item' => true,
-        'warehouse' => true
+        'unit' => true,
+        'warehouse' => true,
+        'reference' => true
     ];
 }
