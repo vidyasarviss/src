@@ -204,9 +204,9 @@ class RecipesController extends AppController
             $this->set('ingredients',$ingredients->find('list'));
             foreach ($items as $item)
             {
-                $item->units=$units->find('list',['id IN '=>[$item->purchase_unit,$item->sell_unit,$item->usage_unit]]);
+              $item->units=$units->find('list',['id IN '=>[$item->purchase_unit,$item->sell_unit,$item->usage_unit]]);
                 
-            }
+           }
         }
         $this->set(compact('recipe'));
     }

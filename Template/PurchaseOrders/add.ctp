@@ -40,7 +40,7 @@
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+<script src="/js/jquery-3.3.1.min.js"></script>
 <script>
     var item_select_box=document.getElementById('item-id');
     window.onload=change(item_select_box);
@@ -127,7 +127,7 @@
 		}
 		
 	});	
-    console.log(item-id);
+    //console.log(item-id);
 	}
 	
 	function calculate_amount(element){     
@@ -164,5 +164,4 @@
 	}
 	
 }
-
 	</script>

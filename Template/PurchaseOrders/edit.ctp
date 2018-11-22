@@ -34,13 +34,19 @@
     </fieldset>
     <table id="purchase_ordersTable">
     <?php
+    $index=1;
     foreach ($purchaseOrder->purchase_order_items as $purchaseOrderItems)
-    {
+    {		
+    		$itemid = 'item_id'.$index;
+    		$unitid = 'unit_id'.$index;
+     		$quantity = 'quantity_id'.$index;
+     		$rate = 'rate_id'.$index;
+            $warehouse = 'warehouse_id'.$index;
     ?>
     <tr>
     <td><?php echo $this->Form->control('checkbox',array('type'=>'checkbox','name'=>'chk[]','id'=>$purchaseOrderItems->id));?></td>
-    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items,'default'=>$purchaseOrderItems->item_id,'name'=>'items[]','onchange'=>'change(this)'));?></td>
-    <td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units,'default'=>$purchaseOrderItems->unit_id,'name'=>'units[]')); ?></td>
+    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items,'default'=>$purchaseOrderItems->item_id,'name'=>'items[]','id'=>$itemid,'onchange'=>'change(this)'));?></td>
+    <td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units,'default'=>$purchaseOrderItems->unit_id,'name'=>'units[]','id'=>$unitid)); ?></td>
     <td><?php echo $this->Form->control('quantity', array('type'=>'number','name'=>'qty[]','required'=>'true','onchange'=>'calculate_amount(this)','default'=>$purchaseOrderItems->quantity)); ?></td>
     <td><?php echo $this->Form->control('rate',array('type'=>'number','name'=>'rate[]','required'=>'true','onchange'=>'calculate_amount(this)','default'=>$purchaseOrderItems->rate)); ?></td>
     <td><?php echo $this->Form->control('warehouse_id',array('type'=>'select','options'=>$warehouses, 'default'=>$purchaseOrderItems->warehouse_id,'name'=>'warehouses[]')); ?></td>
@@ -48,6 +54,7 @@
     </tr>
     
     <?php
+    $index++;
     }
     ?>
     <input type="button" onclick="add_row()" value="Add Row" >
@@ -59,12 +66,22 @@
     <?= $this->Form->end() ?>
    
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+<script src="/js/jquery-3.3.1.min.js"> </script>
  <script>
  
-        var item_select_box=document.getElementById('item-id');
-        window.onload=change(item_select_box);
-        
+ function do_onload(){
+ console.log('vvvvvvvv1111');
+ var smCount = $('#purchase_orderTable tr').length;
+ console.log('fgfgj',smCount);
+  for(var i=1; i<smCount;i++){
+  	console.log("bbnbnbn", $('#item_id'+1));
+  	console.log("item_id_select", item_id_select);
+  	
+  	change(item_id_select);
+  	}
+  	}
+  	window.onload = do_onload();
+    
  	function add_row()
  	{
  	var units = <?php echo json_encode($units)?>;
@@ -86,15 +103,15 @@
     var no_of_rows=$('#purchase_ordersTable tr').length;
     var row = table.insertRow().innerHTML = '<tr>\
     <td><input type="checkbox" name="chk[]" id=chk'+(rowCount+1)+'></td>\
-    <td><select name="items[]" onchange="change(this)" id=item-id'+(no_of_rows)+'>'+item_options+'</select></td>\
-    <td><select name="units[]" id=unit-id'+(no_of_rows)+'>'+unit_options+'</select></td>\
+    <td><select name="items[]" onchange="change(this)" id=item_id'+(no_of_rows)+'>'+item_options+'</select></td>\
+    <td><select name="units[]" id=unit_id'+(no_of_rows)+'>'+unit_options+'</select></td>\
     <td><input type="number" name="qty[]" id=quantity-id'+(no_of_rows)+' onchange="calculate_amount(this)"></td>\
     <td><input type="number" name="rate[]" id=rate-id'+(no_of_rows)+' onchange="calculate_amount(this)"></td>\
     <td><?php echo $this->Form->control(' ',array('type'=>'select','options'=>$warehouses, 'name'=>'warehouses[]')); ?></td>\
     <td><span id=amount'+(no_of_rows)+'></span></td>\
     </tr>';
     
-    var item_select_box = document.getElementById('item-id'+no_of_rows);
+    var item_select_box = document.getElementById('item_id'+no_of_rows);
     change(item_select_box);
     }
     
@@ -113,11 +130,11 @@ function change(element)
 	console.log(current_row);
 	
 	if(current_row =="d"){
-			var unit=$('#unit-id');
+			var unit=$('#unit_id');
 	 		unit.empty();
 			}
 			else{
-			var unit_select_box=$('#unit-id'+current_row);
+			var unit_select_box=$('#unit_id'+current_row);
 			unit_select_box.empty();
 		  }
 		$.ajax({
@@ -137,13 +154,13 @@ function change(element)
 			if(response){
 			if(current_row=="d"){
 			for(var k in response){
-			$("#unit-id").append("<option value=' "+ k +" '>" +response[k]+ "</option>");
+			$("#unit_id").append("<option value=' "+ k +" '>" +response[k]+ "</option>");
 			      }
 			  }
 			else{
 			for(var k in response)
 				{
-			   	$("#unit-id"+current_row).append("<option value=' "+ k +" '>" +response[k]+ "</option>");
+			   	$("#unit_id"+current_row).append("<option value=' "+ k +" '>" +response[k]+ "</option>");
 			  	}
 				}
 			}
@@ -154,7 +171,7 @@ function change(element)
 	}
 	function check()
 	{
-		var puchase_order_item_dlt=$('#puchase_order_item-id');
+		var puchase_order_item_dlt=$('#puchase_order_itemid');
 		var check_box=document.getElementsByName("chk[]");
 		var checkbox_id = new Array();
 		$("input[name='chk[]']:checked").each(function(){

@@ -32,6 +32,7 @@
     <?php
     foreach($recipe->ingredients as $ingredient)
     {
+    
     ?>
     <tr>
     <td><?php echo $this->Form->control('checkbox',array('type'=>'checkbox','name'=>'chk[]','id'=>$ingredient->id));?></td>
@@ -50,7 +51,7 @@
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+ <script src="/js/jquery-3.3.1.min.js"> </script>
  <script>
  
         var item_select_box=document.getElementById('item-id');
@@ -82,6 +83,8 @@
     <td><?php echo $this->Form->control(' ',  array('name'=>'qty[]')); ?></td>\
     <td><select name="units[]" id=unit-id'+(no_of_rows)+'>'+unit_options+'</select></td>\
     </tr>';
+    var item_select_box = document.getElementById('item-id'+no_of_rows);
+    change(item_select_box);
     }
  
     
@@ -94,7 +97,7 @@
 	
 	var selected_value=item_select_box.options[item_select_box.selectedIndex].value;
 	console.log(selected_value);
-	current_row=element.id[element.id.length -1];
+	current_row=element.id[element.id.length -1]
 	
 	console.log(current_row);
 	
