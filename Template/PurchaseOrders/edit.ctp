@@ -45,7 +45,7 @@
     ?>
     <tr>
     <td><?php echo $this->Form->control('checkbox',array('type'=>'checkbox','name'=>'chk[]','id'=>$purchaseOrderItems->id));?></td>
-    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items,'default'=>$purchaseOrderItems->item_id,'name'=>'items[]','id'=>$itemid,'onchange'=>'change(this)'));?></td>
+    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items,'default'=>$purchaseOrderItems->item_id,'name'=>'items[]','id'=>$itemid,'onchange'=>'change(this)','disable'=>'true'));?></td>
     <td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units,'default'=>$purchaseOrderItems->unit_id,'name'=>'units[]','id'=>$unitid)); ?></td>
     <td><?php echo $this->Form->control('quantity', array('type'=>'number','name'=>'qty[]','required'=>'true','onchange'=>'calculate_amount(this)','default'=>$purchaseOrderItems->quantity)); ?></td>
     <td><?php echo $this->Form->control('rate',array('type'=>'number','name'=>'rate[]','required'=>'true','onchange'=>'calculate_amount(this)','default'=>$purchaseOrderItems->rate)); ?></td>
@@ -68,7 +68,8 @@
 </div>
 <script src="/js/jquery-3.3.1.min.js"> </script>
  <script>
- 
+     // var item_select_box=document.getElementById('item-id');
+      // window.onload=change(item_select_box);
  function do_onload(){
  console.log('vvvvvvvv1111');
  var smCount = $('#purchase_orderTable tr').length;
@@ -255,5 +256,4 @@ function change(element)
 	}
 	
 }
-	
 	</script>

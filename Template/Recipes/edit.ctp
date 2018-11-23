@@ -30,18 +30,22 @@
     </fieldset>
     <table id="recipeTable">
     <?php
+    $index=1;
     foreach($recipe->ingredients as $ingredient)
     {
-    
+    		$itemid = 'item_id'.$index;
+    		$unitid = 'unit_id'.$index;
+     		$quantity = 'quantity_id'.$index;
     ?>
     <tr>
     <td><?php echo $this->Form->control('checkbox',array('type'=>'checkbox','name'=>'chk[]','id'=>$ingredient->id));?></td>
-    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items, 'default'=>$ingredient->item_id, 'name'=>'items[]','onchange'=>'change(this)')); ?></td>
+    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items, 'default'=>$ingredient->item_id, 'name'=>'items[]','id'=>$itemid,'onchange'=>'change(this)')); ?></td>
     <td><?php echo $this->Form->control('quantity',  array('name'=>'qty[]','default'=>$ingredient->quantity)); ?></td>
-    <td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units,'default'=>$ingredient->unit_id, 'name'=>'units[]')); ?></td>
+    <td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units,'default'=>$ingredient->unit_id, 'name'=>'units[]','id'=>$unitid)); ?></td>
     </tr>
     
     <?php
+    $index++;
     }
     ?>
     <input type="button" onclick="add_row()" value="Add Row" >
@@ -54,9 +58,21 @@
  <script src="/js/jquery-3.3.1.min.js"> </script>
  <script>
  
-        var item_select_box=document.getElementById('item-id');
-        window.onload=change(item_select_box);
-        
+       // var item_select_box=document.getElementById('item-id');
+        //window.onload=change(item_select_box);
+ function do_onload(){
+ 	console.log('vvvvvvvv1111');
+ 	var smCount = $('#purchase_orderTable tr').length;
+ 	console.log('fgfgj',smCount);
+    for(var i=1; i<smCount;i++){
+  	console.log("bbnbnbn", $('#item_id'+1));
+  	console.log("item_id_select", item_id_select);
+  	
+  	change(item_id_select);
+  	}
+  	}
+  	window.onload = do_onload();
+            
  	function add_row()
  	{
  	var units = <?php echo json_encode($units)?>;
@@ -79,11 +95,11 @@
     var no_of_rows=$('#recipeTable tr').length; 
     var row = table.insertRow().innerHTML = '<tr>\
     <td><input type="checkbox" name="chk[]" id=chk'+(rowCount+1)+'></td>\
-    <td><select name="items[]" onchange="change(this)" id=item-id'+(no_of_rows)+'>'+item_options+'</select></td>\
+    <td><select name="items[]" onchange="change(this)" id=item_id'+(no_of_rows)+'>'+item_options+'</select></td>\
     <td><?php echo $this->Form->control(' ',  array('name'=>'qty[]')); ?></td>\
-    <td><select name="units[]" id=unit-id'+(no_of_rows)+'>'+unit_options+'</select></td>\
+    <td><select name="units[]" id=unit_id'+(no_of_rows)+'>'+unit_options+'</select></td>\
     </tr>';
-    var item_select_box = document.getElementById('item-id'+no_of_rows);
+    var item_select_box = document.getElementById('item_id'+no_of_rows);
     change(item_select_box);
     }
  
@@ -102,11 +118,11 @@
 	console.log(current_row);
 	
 	if(current_row =="d"){
-	var unit=$('#unit-id');
+	var unit=$('#unit_id');
 	 unit.empty();
 	}
 	else{
-	var unit_select_box=$('#unit-id'+current_row);
+	var unit_select_box=$('#unit_id'+current_row);
 	unit_select_box.empty();
 	}
 	$.ajax({
@@ -126,20 +142,20 @@
 			if(response){
 			if(current_row=="d"){
 				for(var k in response){
-					$("#unit-id").append("<option value=' "+ k +" '>" +response[k]+ "</option>");
+					$("#unit_id").append("<option value=' "+ k +" '>" +response[k]+ "</option>");
 			      	}
 			  	}
 			else{
 				for(var k in response)
 				{
-			   	$("#unit-id"+current_row).append("<option value=' "+ k +" '>" +response[k]+ "</option>");
+			   	$("#unit_id"+current_row).append("<option value=' "+ k +" '>" +response[k]+ "</option>");
 			  	}
 				}
 		}
 		}
 		
 	});	
-   //console.log(item-id);
+   //console.log(item_id);
 	}
 	
 	

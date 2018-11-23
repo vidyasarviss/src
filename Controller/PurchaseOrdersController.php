@@ -87,12 +87,12 @@ class PurchaseOrdersController extends AppController
                     //$purchase_order_item->amount= $data['amount'][$i];
                     $purchase_order_item->warehouse_id= $data['warehouses'][$i];
 	                $status=$po_table->save($purchase_order_item);
-	         	//$poi_table=TableRegistry::get('stockTransactions');
+	         	//$st_table=TableRegistry::get('stockTransactions');
 	         	//this is for stock transaction adding
                 if($status)
                 {
-                    $poi_table=TableRegistry::get('stockTransactions');
-                    $pt=$poi_table->newEntity();
+                    $st_table=TableRegistry::get('stockTransactions');
+                    $pt=$st_table->newEntity();
                     $pt->item_id= $item;
                     $pt->purchase_order_id=$purchaseOrder->id;
                     $pt->unit_id= $data['units'][$i];
@@ -102,7 +102,8 @@ class PurchaseOrdersController extends AppController
                     $pt->transaction_date=$purchaseOrder->transaction_date;
                     //$purchase_order_item->amount= $data['amount'][$i];
                     $pt->warehouse_id= $data['warehouses'][$i];
-                    $poi_table->save($pt);
+                    $pt->referenceid=$purchaseOrder->id;
+                    $st_table->save($pt);
                     $i++;
                 }	        
                 }
@@ -152,10 +153,13 @@ class PurchaseOrdersController extends AppController
             'contain' => ['PurchaseOrderItems']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) 
-        {
+        {   
+            //debug($data);die();
             $purchaseOrder = $this->PurchaseOrders->patchEntity($purchaseOrder, $this->request->getData());
+            //debug($this->request->getData());die();
             if ($this->PurchaseOrders->save($purchaseOrder)) 
             {
+            $st_table=TableRegistry::get('stockTransactions');
             $po_table=TableRegistry::get('Purchase_order_items');
                  $items=TableRegistry::get('Items'); 
                  $i = 0;                             
@@ -164,6 +168,7 @@ class PurchaseOrdersController extends AppController
                  	$purchase_order_item = $po_table->find('all')->where(['item_id'=>$item,'purchase_order_id'=>$id])->first();
                  	if($purchase_order_item)
                  	{
+                 	    //debug($item);die();
                  	    $purchase_order_item->item_id= $item;
                         $purchase_order_item->unit_id= $data['units'][$i]; 
                  	    $purchase_order_item->quantity= $data['qty'][$i];
@@ -171,41 +176,62 @@ class PurchaseOrdersController extends AppController
 			    		$purchase_order_item->warehouse_id= $data['warehouses'][$i]; 
 			    		//$purchase_order_item->amount= $data['amount'][$i]; 
 			    		$status=$po_table->save($purchase_order_item);
+			    		if($status)
+			    		{
+			    		    $pt=$st_table->find('all')->where(['item_id'=>$item,'referenceid'=>$id])->first();
+			    		    // $pt=$st_table->newEntity();
+			    		    $pt->item_id= $item;
+			    		    $pt->purchase_order_id=$purchaseOrder->id;
+			    		    $pt->unit_id= $data['units'][$i];
+			    		    $pt->quantity= $data['qty'][$i];
+			    		    $pt->rate= $data['rate'][$i];
+			    		    //$purchase_order_item->amount= $data['amount'][$i];
+			    		    $pt->warehouse_id= $data['warehouses'][$i];
+			    		    $pt->type=2;
+			    		    $pt->transaction_date=$purchaseOrder->transaction_date;
+			    		    $pt->referenceid=$purchaseOrder->id;
+			    		    $st_table->save($pt);
+			    		}
                  	}else{
-                     	$purchase_order_item = $po_table->newEntity();
-                     	$purchase_order_item->purchase_order_id=$purchaseOrder->id;
-                     	$purchase_order_item->item_id= $item;
-                     	$purchase_order_item->unit_id= $data['units'][$i]; 
-                 		$purchase_order_item->quantity= $data['qty'][$i];
-						$purchase_order_item->rate= $data['rate'][$i]; 
-						$purchase_order_item->warehouse_id= $data['warehouses'][$i]; 
-						//$purchase_order_item->amount= $data['amount'][$i]; 
-                 		$status=$po_table->save($purchase_order_item);
-                 		
-                 //This is for stockt_transaction edit
-                 	}
-                 	if($status)
-                 	{
-                 	    $poi_table=TableRegistry::get('stockTransactions');
-                 	    $pt=$poi_table->newEntity();
-                 	    $pt->item_id= $item;
-                 	    $pt->purchase_order_id=$purchaseOrder->id;
-                 	    $pt->unit_id= $data['units'][$i];
-                 	    $pt->quantity= $data['qty'][$i];
-                 	    $pt->rate= $data['rate'][$i];
+                 	    $purchase_order_item = $po_table->newEntity();
+                 	    $purchase_order_item->purchase_order_id=$purchaseOrder->id;
+                 	    $purchase_order_item->item_id= $item;
+                 	    $purchase_order_item->unit_id= $data['units'][$i];
+                 	    $purchase_order_item->quantity= $data['qty'][$i];
+                 	    $purchase_order_item->rate= $data['rate'][$i];
+                 	    $purchase_order_item->warehouse_id= $data['warehouses'][$i];
                  	    //$purchase_order_item->amount= $data['amount'][$i];
-                 	    $pt->warehouse_id= $data['warehouses'][$i];
-                 	    $pt->type=2;
-                 	    $poi_table->save($pt);
+                 	    $status=$po_table->save($purchase_order_item);
+                 	    
+                 	    
+                 	    //This is for stockt_transaction edit
+                 	    //debug($purchase_order_item);die();
+                 	    //$purchase_order_item = $po_table->find('all')->where(['item_id'=>$item,'purchase_order_id'=>$id])->first();
+                 	    if($status)
+                 	    {
+                 	        //$st_table=TableRegistry::get('stockTransactions');
+                 	        $pt=$st_table->newEntity();
+                 	        $pt->item_id= $item;
+                 	        $pt->purchase_order_id=$purchaseOrder->id;
+                 	        $pt->unit_id= $data['units'][$i];
+                 	        $pt->quantity= $data['qty'][$i];
+                 	        $pt->rate= $data['rate'][$i];
+                 	        //$purchase_order_item->amount= $data['amount'][$i];
+                 	        $pt->warehouse_id= $data['warehouses'][$i];
+                 	        $pt->type=2;
+                 	        $pt->transaction_date=$purchaseOrder->transaction_date;
+                 	        $pt->referenceid=$purchaseOrder->id;
+                 	        
+                 	        $st_table->save($pt);
+                 	    }
                  	}
                  	$i++;
-                 	} 
-                 
+                 } 
                  
                 $this->Flash->success(__('The purchase order has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
-                }
+          }
             
                 $units = TableRegistry::get('Units');
                 $this->set('units',$units->find('list'));
@@ -301,4 +327,6 @@ class PurchaseOrdersController extends AppController
   $this->response->body($resultJ);
   return $this->response;
  }
+ 
+ 
 }

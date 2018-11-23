@@ -28,6 +28,7 @@
     
     <table id="purchase_ordersTable">
     	<tr>
+    		<td><?php echo $this->Form->control('checkbox',array('type'=>'checkbox','name'=>'chk[]','id'=>'chk'));?></td>
     		<td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items, 'name'=>'items[]','onchange'=>'change(this)'));?></td>
     		<td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units, 'name'=>'units[]')); ?></td>
     		<td><?php echo $this->Form->control('quantity', array('type'=>'number','name'=>'qty[]','required'=>'true','onchange'=>'calculate_amount(this)')); ?></td>
@@ -36,6 +37,7 @@
     		<td><span id=amount></span></td>
     	</tr>
     		<input type="button" onclick="add_row()" value="Add row" > 
+    		<input type="button" id="delrtbutton" value="Delete row" onclick="check()"> 
     </table>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
@@ -61,8 +63,9 @@
 	
     var table =document.getElementById("purchase_ordersTable");
     var no_of_rows=$('#purchase_ordersTable tr').length;
-    
+    var rowCount = $('#purchase_ordersTable tr').length;
     var row = table.insertRow().innerHTML = '<tr>\
+    <td><input type="checkbox" name="chk[]" id=chk'+(rowCount+1)+'></td>\
     <td><select name="items[]" onchange="change(this)" id=item-id'+(no_of_rows)+'>'+item_options+'</select></td>\
     <td><select name="units[]" id=unit-id'+(no_of_rows)+'>'+unit_options+'</select></td>\
     <td><input type="number" name="qty[]" id=quantity-id'+(no_of_rows)+' onchange="calculate_amount(this)"></td>\
@@ -129,7 +132,58 @@
 	});	
     //console.log(item-id);
 	}
+	function check()
+	{
+		var puchase_order_item_dlt=$('#puchase_order_itemid');
+		var check_box=document.getElementsByName("chk[]");
+		var checkbox_id = new Array();
+		$("input[name='chk[]']:checked").each(function(){
+			console.log($(this).attr('id'));		
+			if($(this).is(":checked")){
+				var chkid = $('#'+$(this).attr('id'));
+				var isnum = /^\d+$/.test($(this).attr('id'));				
+				if(!isnum)
+				{				
+					chkid.closest("tr").remove();
+				}
+				else{
+				   checkbox_id.push($(this).attr('id'));
+				}
+			}
+	});
 	
+	if(checkbox_id.length > 0){
+	console.log(checkbox_id);
+	$.ajax({ 
+			type: 'POST',
+			async:true,
+			cache:false,
+			url: '/purchase-orders/getitems',
+		  	data: { 
+		    purchase_order_itemid:checkbox_id
+		  	},
+		  	dataType: 'json',
+			beforeSend: function(xhr) {
+			//xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			xhr.setRequestHeader('X-CSRF-Token',$('[name="_csrfToken"]').val());
+			},
+			success: function(response) {
+				if (response.error) {
+					alert(response.error);
+					console.log(response.error);
+					}
+				if(response){
+					checkbox_id.forEach(function(entry){
+					console.log(entry);
+					var chkid = $('#'+entry);
+			    	chkid.closest('tr').remove();
+				});
+				}
+				}
+	});
+	//console.log(chkid);
+	}
+	}
 	function calculate_amount(element){     
 	var input_box = document.getElementById(element.id);
 	console.log("element ",input_box);
