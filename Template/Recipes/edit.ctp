@@ -62,9 +62,9 @@
         //window.onload=change(item_select_box);
  function do_onload(){
  	console.log('vvvvvvvv1111');
- 	var smCount = $('#purchase_orderTable tr').length;
- 	console.log('fgfgj',smCount);
-    for(var i=1; i<smCount;i++){
+ 	var rowCount = $('#purchase_orderTable tr').length;
+ 	console.log('fgfgj',rowCount);
+    for(var i=1; i<rowCount;i++){
   	console.log("bbnbnbn", $('#item_id'+1));
   	console.log("item_id_select", item_id_select);
   	
@@ -95,9 +95,9 @@
     var no_of_rows=$('#recipeTable tr').length; 
     var row = table.insertRow().innerHTML = '<tr>\
     <td><input type="checkbox" name="chk[]" id=chk'+(rowCount+1)+'></td>\
-    <td><select name="items[]" onchange="change(this)" id=item_id'+(no_of_rows)+'>'+item_options+'</select></td>\
+    <td><select name="items[]" onchange="change(this)" id=item_id'+(no_of_rows+1)+'>'+item_options+'</select></td>\
     <td><?php echo $this->Form->control(' ',  array('name'=>'qty[]')); ?></td>\
-    <td><select name="units[]" id=unit_id'+(no_of_rows)+'>'+unit_options+'</select></td>\
+    <td><select name="units[]" id=unit_id'+(no_of_rows+1)+'>'+unit_options+'</select></td>\
     </tr>';
     var item_select_box = document.getElementById('item_id'+no_of_rows);
     change(item_select_box);
@@ -117,8 +117,8 @@
 	
 	console.log(current_row);
 	
-	if(current_row =="d"){
-	var unit=$('#unit_id');
+	if(current_row =="1"){
+	var unit=$('#unit_id1');
 	 unit.empty();
 	}
 	else{
@@ -140,9 +140,9 @@
 				console.log(response.error);
 			}
 			if(response){
-			if(current_row=="d"){
+			if(current_row=="1"){
 				for(var k in response){
-					$("#unit_id").append("<option value=' "+ k +" '>" +response[k]+ "</option>");
+					$("#unit_id1").append("<option value=' "+ k +" '>" +response[k]+ "</option>");
 			      	}
 			  	}
 			else{

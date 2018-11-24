@@ -84,9 +84,9 @@
  
  	function do_onload()
  	{
-        var smCount = $('#viewTable tr').length;
-        console.log('afasfasf111111 ', smCount);        
-        for(var i=1; i<smCount;i++){
+        var poCount = $('#viewTable tr').length;
+        console.log('afasfasf111111 ', poCount);        
+        for(var i=1; i<poCount;i++){
             console.log("iiiiii ", $('#quantity'+i));
             var qty = $('#quantity_id'+i).text();
 			var rate = $('#rate_id'+i).text();
