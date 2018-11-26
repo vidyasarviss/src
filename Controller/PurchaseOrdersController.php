@@ -316,10 +316,27 @@ class PurchaseOrdersController extends AppController
  	 foreach($pid['purchase_order_itemid'] as $id)
   	{
       $pstatus = $Purchase_order_items_table->get($id);
-      $Purchase_order_items_table->delete($pstatus);
-  
- 	 }
-  
+      $status=$Purchase_order_items_table->delete($pstatus);
+      if($status)
+      {  
+          $st_table=TableRegistry::get('stock_transactions');
+          $stck = $st_table->find('all')->where(['item_id'=>$pstatus->item_id,'referenceid'=>$pstatus->purchase_order_id])->first();
+          //debug($stck);die();
+          $status=$st_table->delete($stck);
+          if($status)
+             {
+              $status=true;
+             }else{
+                    $status=false;
+                    break;
+                   }
+         
+       }else{
+              $status=false;
+              break;
+            }
+     }
+ 	 
   $this->RequestHandler->renderAs($this,'json');
   
   $resultJ=json_encode($pstatus);
