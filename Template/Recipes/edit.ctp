@@ -39,8 +39,9 @@
     ?>
     <tr>
     <td><?php echo $this->Form->control('checkbox',array('type'=>'checkbox','name'=>'chk[]','id'=>$ingredient->id));?></td>
-    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items, 'default'=>$ingredient->item_id, 'name'=>'items[]','id'=>$itemid,'onchange'=>'change(this)','disabled'=>'false')); ?></td>
-    <td><?php echo $this->Form->control('quantity',  array('name'=>'qty[]','default'=>$ingredient->quantity)); ?></td>
+    <td><?php echo $this->Form->control('item_id',array('type'=>'select','options'=>$items, 'default'=>$ingredient->item_id, 'name'=>'items[]','id'=>$itemid,'onchange'=>'change(this)','disabled'=>'true')); ?></td>
+    <td><?php echo $this->Form->control('item_id',array('type'=>'hidden','options'=>$items, 'default'=>$ingredient->item_id, 'name'=>'items[]','id'=>$itemid,'onchange'=>'change(this)')); ?></td>
+    <td><?php echo $this->Form->control('quantity',  array('name'=>'qty[]','default'=>$ingredient->quantity,'id'=>$quantity)); ?></td>
     <td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units,'default'=>$ingredient->unit_id, 'name'=>'units[]','id'=>$unitid)); ?></td>
     </tr>
     
@@ -62,13 +63,15 @@
         //window.onload=change(item_select_box);
  function do_onload(){
  	console.log('vvvvvvvv1111');
- 	var rowCount = $('#purchase_orderTable tr').length;
+ 	var item_select_box=document.getElementById('item_id');
+ 	var rowCount = $('#recipeTable tr').length;
  	console.log('fgfgj',rowCount);
-    for(var i=1; i<rowCount;i++){
-  	console.log("bbnbnbn", $('#item_id'+1));
-  	console.log("item_id_select", item_id_select);
+    for(var i=1; i<=rowCount;i++){
+  	console.log("bbnbnbn", $('#item_id'+i));
+  	var item_id = $('#item_id'+i).attr('id');
+  	//console.log("item_id_select", item_id_select);
   	
-  	change(item_id_select);
+  	change(item_id);
   	}
   	}
   	window.onload = do_onload();
@@ -95,25 +98,26 @@
     var no_of_rows=$('#recipeTable tr').length; 
     var row = table.insertRow().innerHTML = '<tr>\
     <td><input type="checkbox" name="chk[]" id=chk'+(rowCount+1)+'></td>\
-    <td><select name="items[]" onchange="change(this)" id=item_id'+(no_of_rows+1)+'>'+item_options+'</select></td>\
-    <td><?php echo $this->Form->control(' ',  array('name'=>'qty[]')); ?></td>\
+    <td><select name="items[]" onchange="change(this.id)" id=item_id'+(no_of_rows+1)+'>'+item_options+'</select></td>\
+    <td></td>\
+    <td><input type="number" name="qty[]" id=quantity_id'+(no_of_rows+1)+'></td>\
     <td><select name="units[]" id=unit_id'+(no_of_rows+1)+'>'+unit_options+'</select></td>\
     </tr>';
-    var item_select_box = document.getElementById('item_id'+no_of_rows);
-    change(item_select_box);
+    var item_select_box = document.getElementById('item_id'+(no_of_rows+1));
+    change(item_select_box.id);
     }
  
     
-    function change(element) 
+    function change(id) 
 	{
 	//console.log("bbb");
-	var item_select_box=document.getElementById(element.id);
+	var item_select_box=document.getElementById(id);
 	
 	//this will give the selected dropdown value,tht is item id
 	
 	var selected_value=item_select_box.options[item_select_box.selectedIndex].value;
 	console.log(selected_value);
-	current_row=element.id[element.id.length -1]
+	current_row=id[id.length -1]
 	
 	console.log(current_row);
 	
@@ -128,6 +132,7 @@
 	$.ajax({
 			type: 'get',
 			url: '/recipes/getunits',
+			async: false,
 		 	data: { 
 		    itemid: selected_value
 		  	},
