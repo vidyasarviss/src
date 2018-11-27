@@ -4,6 +4,9 @@
  * @var \App\Model\Entity\PurchaseOrder $purchaseOrder
  */
 ?>
+
+            <div class="message success success-message" onclick="this.classList.add('hidden')">The purchase order has been saved.</div>
+            <div class="message success error-message" onclick="this.classList.add('hidden')">The purchase order has been saved.</div>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
@@ -26,11 +29,15 @@
         <legend><?= __('Edit Purchase Order') ?></legend>
         <?php
             echo $this->Form->control('supplier_id', ['options' => $suppliers, 'empty' => true]);
-            $this->Form->templates(['dateWidget'=>'{{day}}{{month}}{{year}}']);
-            echo $this->Form->control('transaction_date');
-            echo $this->Form->control('required_date');
+            //$this->Form->templates(['dateWidget'=>'{{day}}{{month}}{{year}}']);
+            //echo $this->Form->control('transaction_date');
+            //echo $this->Form->control('required_date');
             
         ?>
+        transaction_date <input type="date" id="t_date" name="transaction_date" value="<?php echo date ("Y-m-d",strtotime($purchaseOrder->transaction_date))?>">
+        required_date    <input type="date" id="r_date" name="required_date" value="<?php echo date("Y-m-d", strtotime($purchaseOrder->required_date))?>" onchange="dateComp()">
+        
+        
     </fieldset>
     <table id="purchase_ordersTable">
     <?php
@@ -59,20 +66,20 @@
     $index++;
     }
     ?>
-    <input type="button" onclick="add_row()" value="Add Row" >
+    <input type="button" onclick="add_row();submit1();"  value="Add Row" >
     <input type="button" id="delrtbutton" value="Delete row" onclick="check()"> 
     
+    
     </table>
-    <?= $this->Form->button(__('Submit')) ?>
+    <button type="submit" id="smtbutton" value="submit"> Submit </button>
     <?= $this->Form->end() ?>
    
 </div>
 <script src="/js/jquery-3.3.1.min.js"> </script>
  <script>
-//var item_select_box=document.getElementById('item_id');
-//window.onload=change(item_select_box);
 
- function do_onload(){
+ function do_onload()
+ {
  console.log('vvvvvvvv1111');
  var item_select_box=document.getElementById('item_id');
  var poCount = $('#purchase_ordersTable tr').length;
@@ -87,6 +94,7 @@
   	}
   	window.onload = do_onload();
   	console.log("jghfj");
+  	
   	
  function add_row()
  	{
@@ -225,15 +233,26 @@ function change(id)
 			},
 			success: function(response) {
 				if (response.error) {
+					$('.success-message').hide();
+                	$('.error-message').show();
+                	$('.error-message').html("The purchase order could not be deleted. Please, try again.");
+                	$('.error-message').fadeIn();
 					alert(response.error);
 					console.log(response.error);
 					}
+					
 				if(response){
 					checkbox_id.forEach(function(entry){
 					console.log(entry);
 					var chkid = $('#'+entry);
 			    	chkid.closest('tr').remove();
+			    	
+					$('.success-message').show();
+                	$('.error-message').hide();
+                	$('.success-message').html("The purchase order has been deleted");
+                	$('.success-message').fadeIn();			    	
 				});
+				submit1();check
 				}
 				}
 	});
@@ -276,6 +295,35 @@ function change(id)
 		console.log(amount);
 		$('#amount'+current_row).html(amount);
 	}
-	
-}
+	}
+	function submit1()
+	{
+		console.log("vvvv");
+		var no_of_rows = $('#purchase_ordersTable tr').length;
+		
+		if(no_of_rows == 0)
+		{
+	 		var sub=$('#smtbutton').hide();
+	 	}else{
+	 		var sub=$('#smtbutton').show();
+	  		 }
+	}
+  	window.onload = submit1();
+  	
+  function dateComp()
+  {
+   
+   var date1 = $('#t_date').val();
+   var date2 = $('#r_date').val();
+   
+  	if(date1 >= date2)
+  		{
+  		alert('transaction date cannot be greater then required date')
+    	}else{
+    	alert('valid date')
+    	}
+
+  }
+  
+
 	</script>

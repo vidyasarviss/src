@@ -20,10 +20,12 @@
         <legend><?= __('Add Purchase Order') ?></legend>
         <?php
             echo $this->Form->control('supplier_id', ['options' => $suppliers,'required'=>'true','empty' => true]);
-            $this->Form->templates(['dateWidget'=>'{{day}}{{month}}{{year}}']);
-            echo $this->Form->control('transaction_date');
-            echo $this->Form->control('required_date');
+            //$this->Form->templates(['dateWidget'=>'{{day}}{{month}}{{year}}']);
+            //echo $this->Form->control('transaction_date');
+            //echo $this->Form->control('required_date');
         ?>
+        transaction_date <input type="date" id="t_date" name="transaction_date">
+        required_date    <input type="date" id="r_date" name="required_date" onchange="dateComp()">
     </fieldset>
     
     <table id="purchase_ordersTable">
@@ -218,4 +220,19 @@
 	}
 	
 }
+function dateComp()
+  {
+   
+   var date1 = $('#t_date').val();
+   var date2 = $('#r_date').val();
+   
+  	if(date1 >= date2)
+  		{
+  		alert('transaction date cannot be greater then required date')
+    	}else{
+    	alert('valid date')
+    	}
+
+  }
+  
 	</script>

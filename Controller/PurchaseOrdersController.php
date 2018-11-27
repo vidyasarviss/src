@@ -57,7 +57,6 @@ class PurchaseOrdersController extends AppController
 			$purchaseOrderItems->warehouse_name=$warehouses->get($purchaseOrderItems->warehouse_id)->name;
 	    }
 	    
-
         $this->set('purchaseOrder', $purchaseOrder);
     }
 
@@ -226,10 +225,10 @@ class PurchaseOrdersController extends AppController
                  	    }
                  	}
                  	$i++;
-                 } 
-                 
+                 }
+                
                 $this->Flash->success(__('The purchase order has been saved.'));
-
+                 
                 return $this->redirect(['action' => 'index']);
           }
             
@@ -336,7 +335,7 @@ class PurchaseOrdersController extends AppController
               break;
             }
      }
- 	 
+     
   $this->RequestHandler->renderAs($this,'json');
   
   $resultJ=json_encode($pstatus);
@@ -344,6 +343,4 @@ class PurchaseOrdersController extends AppController
   $this->response->body($resultJ);
   return $this->response;
  }
- 
- 
 }
