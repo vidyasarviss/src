@@ -1,4 +1,5 @@
 <?php
+use Setasign\Fpdf;
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -343,4 +344,86 @@ class PurchaseOrdersController extends AppController
   $this->response->body($resultJ);
   return $this->response;
  }
+ public function generatepdf()
+ {
+     $this->RequestHandler->respondAs('json');
+     $this->response->type('application/json');
+     $this->autoRender = false ;
+     $id = $this->request->query()['id'];
+     $po_table = TableRegistry::get('PurchaseOrders');
+     $po = $po_table->get($id, [
+         'contain' => ['PurchaseOrderItems']
+     ]);
+     
+     $width_cell=array(20,30,20,20,20,50,30);
+     $width_cell1=array(50,200);
+     
+     $sp_table = TableRegistry::get('suppliers');
+     $supplier = $sp_table->get($po->supplier_id);
+     //debug($supplier);die();
+     $po->supplier_name = $supplier->name;
+     
+     $pdf = new \FPDF();
+     $pdf->AddPage();
+     $pdf->SetFont('Arial','B',14);
+     
+     $pdf->Cell($width_cell1[0],10,'Supplier Name:',0,0,'C',false); //1 column of row 1
+     $pdf->Cell($width_cell1[1],10,$po->supplier_name,0,1,'C',false); //1 column of row 1
+     
+     $pdf->Cell($width_cell1[0],10,' Transaction date:',0,0,'C',false); //1 column of row 1
+     $pdf->Cell($width_cell1[1],10,$po->transaction_date,0,1,'C',false); 
+     
+     $pdf->Cell($width_cell1[0],10,'Required date:',0,0,'C',false); //1 column of row 1
+     $pdf->Cell($width_cell1[1],10,$po->required_date,0,1,'C',false); 
+     
+     $pdf->SetFont('Arial','B',16);
+     $pdf->Cell(130,20,'Related purchase Order Items',0,4,'R');
+     $pdf->SetFont('Arial','B',12);
+     $pdf->Cell($width_cell[0],10,'Id',1,0,'C',false); //1 column of row 1 
+     $pdf->Cell($width_cell[1],10,'Item',1,0,'C',false);//2 column of row 1 
+     $pdf->Cell($width_cell[2],10,'Unit',1,0,'C',false);//3 column of row 1
+     $pdf->Cell($width_cell[3],10,'Quantity',1,0,'C',false);//4 column of row 1
+     $pdf->Cell($width_cell[4],10,'Rate',1,0,'C',false);//5 column of row 1
+     $pdf->Cell($width_cell[6],10,'Amount',1,0,'C',false);//6 column of row 1
+     $pdf->Cell($width_cell[5],10,'Warehouse',1,1,'C',false);//7 column of row 1 and use 1 to break the line n conti..2row
+     
+    // $pdf->Cell($width_cell[1],10,'John Deo',1,0,'C',false);
+     $i=0;
+     foreach ($po->purchase_order_items as $purchaseOrderItem)
+     {    $pdf->SetFont('Arial','',12);
+         $qty=$purchaseOrderItem->quantity;
+         $rate=$purchaseOrderItem->rate;
+         $amount=$qty*$rate;
+         
+         $items = TableRegistry::get('Items');
+         $purchaseOrderItem->purchaseOrder_id=$po->id;
+         $purchaseOrderItem->item_name = $items->get($purchaseOrderItem->item_id)->item_name;
+         
+         $units= TableRegistry::get('Units');
+         $purchaseOrderItem->purchaseOrder_id=$po->id;
+         $purchaseOrderItem->unit_name=$units->get($purchaseOrderItem->unit_id)->name;
+         
+         $warehouses = TableRegistry::get('Warehouses');
+         $purchaseOrderItem->purchaseOrder_id=$po->id;
+         $purchaseOrderItem->warehouse_name=$warehouses->get($purchaseOrderItem->warehouse_id)->name;
+         
+         $pdf->Cell($width_cell[0],10,$purchaseOrderItem->id,1,0,'C',false);
+         $pdf->Cell($width_cell[1],10,$purchaseOrderItem->item_name,1,0,'C',false);
+         $pdf->Cell($width_cell[2],10,$purchaseOrderItem->unit_name,1,0,'C',false);
+         $pdf->Cell($width_cell[3],10,$purchaseOrderItem->quantity,1,0,'C',false);
+         $pdf->Cell($width_cell[4],10,$purchaseOrderItem->rate,1,0,'C',false);
+         $pdf->Cell($width_cell[6],10,$amount,1,0,'C',false);
+         $pdf->Cell($width_cell[5],10,$purchaseOrderItem->warehouse_name,1,1,'C',false);
+         
+         $i++;
+         
+     }
+     
+     $pdf->Output();
+     exit;
+     
+     
+ }
+ 
+ 
 }

@@ -4,6 +4,7 @@
  * @var \App\Model\Entity\PurchaseOrder $purchaseOrder
  */
 ?>
+
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
@@ -19,6 +20,8 @@
 </nav>
 <div class="purchaseOrders view large-9 medium-8 columns content">
     <h3><?= h($purchaseOrder->id) ?></h3>
+   <button type="print"  value="submit" onclick="pdf_print()"> Print </button>
+   <input type="hidden" value="<?php echo $purchaseOrder->id; ?>" id="poid">
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Supplier') ?></th>
@@ -97,4 +100,12 @@
 	}
 		
 		window.onload = do_onload();
+	
+	function pdf_print()
+	{
+	var poid = $('#poid').val();
+	window.open("http://localhost:8765/purchase-orders/generatepdf?id="+poid);
+	
+	}
+	
  </script>

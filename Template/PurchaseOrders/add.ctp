@@ -24,8 +24,8 @@
             //echo $this->Form->control('transaction_date');
             //echo $this->Form->control('required_date');
         ?>
-        transaction_date <input type="date" id="t_date" name="transaction_date">
-        required_date    <input type="date" id="r_date" name="required_date" onchange="dateComp()">
+        Transaction date <input type="date" id="t_date" name="transaction_date">
+        Required date    <input type="date" id="r_date" name="required_date" onchange="dateComp()">
     </fieldset>
     
     <table id="purchase_ordersTable">
@@ -35,11 +35,11 @@
     		<td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units, 'name'=>'units[]')); ?></td>
     		<td><?php echo $this->Form->control('quantity', array('type'=>'number','name'=>'qty[]','required'=>'true','onchange'=>'calculate_amount(this)')); ?></td>
     		<td><?php echo $this->Form->control('rate',array('type'=>'number','name'=>'rate[]','required'=>'true','onchange'=>'calculate_amount(this)')); ?></td>
-    		<td><?php echo $this->Form->control('warehouse_id',array('type'=>'select','options'=>$warehouses, 'name'=>'warehouses[]')); ?></td>
     		<td><span id=amount></span></td>
+    		<td><?php echo $this->Form->control('warehouse_id',array('type'=>'select','options'=>$warehouses, 'name'=>'warehouses[]')); ?></td>
     	</tr>
     		<input type="button" onclick="add_row()" value="Add row" > 
-    		<input type="button" id="delrtbutton" value="Delete row" onclick="check()"> 
+    		<input type="button" id="delrtbutton" value="Delete row" onclick="delcheck()"> 
     </table>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
@@ -72,9 +72,8 @@
     <td><select name="units[]" id=unit-id'+(no_of_rows)+'>'+unit_options+'</select></td>\
     <td><input type="number" name="qty[]" id=quantity-id'+(no_of_rows)+' onchange="calculate_amount(this)"></td>\
     <td><input type="number" name="rate[]" id=rate-id'+(no_of_rows)+' onchange="calculate_amount(this)"></td>\
-    <td><?php echo $this->Form->control('',array('type'=>'select','options'=>$warehouses, 'name'=>'warehouses[]')); ?></td>\
     <td><span id=amount'+(no_of_rows)+'></span></td>\
-    <td><span id=amount-id'+(no_of_rows)+'></span></td>\
+    <td><?php echo $this->Form->control('',array('type'=>'select','options'=>$warehouses, 'name'=>'warehouses[]')); ?></td>\
     </tr>';
     
     var item_select_box = document.getElementById('item-id'+no_of_rows);
@@ -134,7 +133,7 @@
 	});	
     //console.log(item-id);
 	}
-	function check()
+	function delcheck()
 	{
 		var puchase_order_item_dlt=$('#puchase_order_itemid');
 		var check_box=document.getElementsByName("chk[]");

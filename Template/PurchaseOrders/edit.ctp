@@ -58,8 +58,8 @@
     <td><?php echo $this->Form->control('unit_id',array('type'=>'select','options'=>$units,'default'=>$purchaseOrderItems->unit_id,'name'=>'units[]','id'=>$unitid)); ?></td>
     <td><?php echo $this->Form->control('quantity', array('type'=>'number','name'=>'qty[]','required'=>'true','onchange'=>'calculate_amount(this)','id'=>$quantity,'default'=>$purchaseOrderItems->quantity)); ?></td>
     <td><?php echo $this->Form->control('rate',array('type'=>'number','name'=>'rate[]','required'=>'true','onchange'=>'calculate_amount(this)','id'=>$rate,'default'=>$purchaseOrderItems->rate)); ?></td>
-    <td><?php echo $this->Form->control('warehouse_id',array('type'=>'select','options'=>$warehouses,'default'=>$purchaseOrderItems->warehouse_id,'name'=>'warehouses[]','id'=>$warehouse)); ?></td>
     <td><span id='<?php echo $amount ?>'></span></td>
+    <td><?php echo $this->Form->control('warehouse_id',array('type'=>'select','options'=>$warehouses,'default'=>$purchaseOrderItems->warehouse_id,'name'=>'warehouses[]','id'=>$warehouse)); ?></td>
     </tr>
     
     <?php
@@ -67,7 +67,7 @@
     }
     ?>
     <input type="button" onclick="add_row();submit1();"  value="Add Row" >
-    <input type="button" id="delrtbutton" value="Delete row" onclick="check()"> 
+    <input type="button" id="delrtbutton" value="Delete row" onclick="delcheck()"> 
     
     
     </table>
@@ -128,8 +128,8 @@
     <td><select name="units[]" id=unit_id'+(no_of_rows+1)+'>'+unit_options+'</select></td>\
     <td><input type="number" name="qty[]" id=quantity_id'+(no_of_rows+1)+' onchange="calculate_amount(this)"></td>\
     <td><input type="number" name="rate[]" id=rate_id'+(no_of_rows+1)+' onchange="calculate_amount(this)"></td>\
-    <td><select name="warehouses[]" id=warehouse_id'+(no_of_rows+1)+'>'+warehouse_options+'</select></td>\
     <td><span id=amount'+(no_of_rows+1)+'></span></td>\
+    <td><select name="warehouses[]" id=warehouse_id'+(no_of_rows+1)+'>'+warehouse_options+'</select></td>\
     </tr>';
     var item_select_box = document.getElementById('item_id'+(no_of_rows+1));
     change(item_select_box.id);
@@ -196,7 +196,7 @@ function change(id)
 	});	
   
 	}
-	function check()
+	function delcheck()
 	{
 		var puchase_order_item_dlt=$('#puchase_order_itemid');
 		var check_box=document.getElementsByName("chk[]");
