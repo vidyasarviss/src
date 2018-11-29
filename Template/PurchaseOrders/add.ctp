@@ -80,24 +80,28 @@
     change(item_select_box);
     }
     
-     function change(element) 
+  function change(element) 
 	{
 	var item_select_box=document.getElementById(element.id);
 	
 	//this will give the selected dropdown value,tht is item id
 	
 	var selected_value=item_select_box.options[item_select_box.selectedIndex].value;
-	//console.log(selected_value);
-	current_row=element.id[element.id.length -1];
+	console.log("1111111111111",selected_value);
 	
-	//console.log(current_row);
+	console.log(element.id);
 	
-	if(current_row =="d"){
+	var element_id=element.id.replace(/[^0-9]/g, '');
+	console.log("ghgh",element_id);
+	
+	
+	if(element_id ==""){
+	console.log("jjjj");
 			var unit=$('#unit-id');
 	 		unit.empty();
 			}
-			else{
-			var unit_select_box=$('#unit-id'+current_row);
+			if(element_id>=1){
+			var unit_select_box=$('#unit-id'+element_id);
 			unit_select_box.empty();
 		  }
 	
@@ -107,24 +111,26 @@
 		    data: { 
 		    itemid: selected_value
 		    },
+		    dataType: 'json',
 			beforeSend: function(xhr) {
 			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 			},
 			success: function(response) {
 			if (response.error) {
 				alert(response.error);
-				console.log(response.error);
+				//console.log(response.error);
 			}
 			if(response){
-			if(current_row=="d"){
+			if(element_id==""){
 			for(var k in response){
 			$("#unit-id").append("<option value=' "+ k +" '>" +response[k]+ "</option>");
 			      }
+			      console.log("1111111d","#unit-id");
 			     }
-			else{
+			if(element_id>=1){
 			for(var k in response)
 				{
-			   	$("#unit-id"+current_row).append("<option value=' "+ k +" '>" +response[k]+ "</option>");
+			   	$("#unit-id"+element_id).append("<option value=' "+ k +" '>" +response[k]+ "</option>");
 			  	}
 				}
 			}
@@ -185,7 +191,7 @@
 	//console.log(chkid);
 	}
 	}
-	function calculate_amount(element){     
+function calculate_amount(element){     
 	var input_box = document.getElementById(element.id);
 	console.log("element ",input_box);
 	
@@ -219,6 +225,7 @@
 	}
 	
 }
+
 function dateComp()
   {
    

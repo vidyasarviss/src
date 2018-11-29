@@ -355,8 +355,9 @@ class PurchaseOrdersController extends AppController
          'contain' => ['PurchaseOrderItems']
      ]);
      
-     $width_cell=array(20,30,20,20,20,50,30);
-     $width_cell1=array(50,200);
+     $width_cell=array(20,40,20,20,20,50,20);
+     $width_cell1=array(50,240);
+     
      
      $sp_table = TableRegistry::get('suppliers');
      $supplier = $sp_table->get($po->supplier_id);
@@ -365,15 +366,17 @@ class PurchaseOrdersController extends AppController
      
      $pdf = new \FPDF();
      $pdf->AddPage();
+     $pdf->SetFont('Arial','B',16);
+     $pdf->Cell(130,20,'Purchase order report',0,4,'R');
      $pdf->SetFont('Arial','B',14);
      
-     $pdf->Cell($width_cell1[0],10,'Supplier Name:',0,0,'C',false); //1 column of row 1
-     $pdf->Cell($width_cell1[1],10,$po->supplier_name,0,1,'C',false); //1 column of row 1
+     $pdf->Cell($width_cell1[0],10,'Supplier Name:',0,0,'L',false); 
+     $pdf->Cell($width_cell1[1],10,$po->supplier_name,0,1,'C',false); 
      
-     $pdf->Cell($width_cell1[0],10,' Transaction date:',0,0,'C',false); //1 column of row 1
+     $pdf->Cell($width_cell1[0],10,'Transaction date:',0,0,'L',false); 
      $pdf->Cell($width_cell1[1],10,$po->transaction_date,0,1,'C',false); 
      
-     $pdf->Cell($width_cell1[0],10,'Required date:',0,0,'C',false); //1 column of row 1
+     $pdf->Cell($width_cell1[0],10,'Required date:',0,0,'L',false); 
      $pdf->Cell($width_cell1[1],10,$po->required_date,0,1,'C',false); 
      
      $pdf->SetFont('Arial','B',16);

@@ -6,7 +6,7 @@
 ?>
 
             <div class="message success success-message" onclick="this.classList.add('hidden')">The purchase order has been saved.</div>
-            <div class="message success error-message" onclick="this.classList.add('hidden')">The purchase order has been saved.</div>
+            
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
@@ -66,7 +66,7 @@
     $index++;
     }
     ?>
-    <input type="button" onclick="add_row();submit1();"  value="Add Row" >
+    <input type="button" onclick="add_row();hide_submit();"  value="Add Row" >
     <input type="button" id="delrtbutton" value="Delete row" onclick="delcheck()"> 
     
     
@@ -139,27 +139,25 @@
 function change(id) 
 	{
 	
-	console.log("bbb");
+	console.log("bbb",id);
 	var item_select_box=document.getElementById(id);
 	
 	//this will give the selected dropdown value,tht is item id
 	console.log("jjj");
 	var selected_value=item_select_box.options[item_select_box.selectedIndex].value;
-	console.log("lll");
-    console.log(selected_value);
-	current_row = id[id.length -1]
-	
-	console.log("current_row",current_row);
-	
-	if(current_row =="1"){
-			var unit=$('#unit_id1');
+	          //console.log("lll");
+	console.log("element id",id);
+           //console.log(selected_value);
+     var element_id= id.replace(/[^0-9]/g, '');
+     
+     console.log("opooooo ",element_id);
+     
+	if(element_id >=1){
+			var unit=$('#unit_id'+element_id);
+			console.log("unit111111 ",unit);
 	 		unit.empty();
 			}
-			else{
-			console.log("OOOOOOOOOOO");
-			var unit_select_box=$('#unit_id'+current_row);
-			unit_select_box.empty();
-		  }
+			
 		$.ajax({
 			type: 'get',
 			url: '/purchase-orders/getunits',
@@ -167,6 +165,7 @@ function change(id)
 		    data: { 
 		    itemid: selected_value
 		    },
+		    dataType: 'json',
 			beforeSend: function(xhr) {
 			xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 			},
@@ -176,20 +175,16 @@ function change(id)
 				console.log(response.error);
 			}
 			if(response){
-			if(current_row=="1"){
+			if(element_id >= 1){
 			console.log("jhjjhhjjj");
 			for(var k in response)
 			{
-			$("#unit_id1").append("<option value=' "+ k +" '>" +response[k]+ "</option>");
+			$("#unit_id"+element_id).append("<option value=' "+ k +" '>" +response[k]+ "</option>");
 			      }
+			      console.log("1111111d","#unit-id"+element_id);
 			  }
-			else{
-			console.log("ppppppppppp");
-			for(var k in response)
-				{
-			   	$("#unit_id"+current_row).append("<option value=' "+ k +" '>" +response[k]+ "</option>");
-			  	}
-				}
+			
+				
 			}
 		}
 		
@@ -252,7 +247,7 @@ function change(id)
                 	$('.success-message').html("The purchase order has been deleted");
                 	$('.success-message').fadeIn();			    	
 				});
-				submit1();check
+				hide_submit();
 				}
 				}
 	});
@@ -268,8 +263,7 @@ function change(id)
 	//substring qty.id, get last number
 		current_row = element.id[element.id.length -1]
 		console.log("current_row ",current_row); 	
-		
-		
+	
 	if(current_row == "y" || current_row == "e"){
 		var rate_box = "";
 		if(current_row == "y"){
@@ -296,7 +290,7 @@ function change(id)
 		$('#amount'+current_row).html(amount);
 	}
 	}
-	function submit1()
+	function hide_submit()
 	{
 		console.log("vvvv");
 		var no_of_rows = $('#purchase_ordersTable tr').length;
@@ -308,7 +302,7 @@ function change(id)
 	 		var sub=$('#smtbutton').show();
 	  		 }
 	}
-  	window.onload = submit1();
+  	window.onload = hide_submit();
   	
   function dateComp()
   {
@@ -318,12 +312,12 @@ function change(id)
    
   	if(date1 >= date2)
   		{
-  		alert('transaction date cannot be greater then required date')
+  		alert('Transaction date cannot be greater then required date')
     	}else{
-    	alert('valid date')
+    	alert('Entered date is valid')
     	}
 
   }
-  
+ // <div class="message success error-message" onclick="this.classList.add('hidden')">The purchase order has been saved.</div>
 
 	</script>
