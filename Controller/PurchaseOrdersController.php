@@ -111,7 +111,7 @@ class PurchaseOrdersController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            debug($purchase_order->errors());die();
+            //debug($purchase_order->errors());die();
             $units = TableRegistry::get('Units');
             $this->set('units',$units->find('list'));
             
