@@ -5,8 +5,6 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\ORM\Rule\IsUnique;
-use Cake\ORM\TableRegistry;
 
 /**
  * Recipes Model
@@ -40,9 +38,7 @@ class RecipesTable extends Table
         $this->setPrimaryKey('id');
 
         $this->hasMany('Ingredients', [
-            'foreignKey' => 'recipe_id',
-            'dependent'  => true,
-            'cascadeCallbacks' => true
+            'foreignKey' => 'recipe_id'
         ]);
     }
 
@@ -77,20 +73,4 @@ class RecipesTable extends Table
 
         return $validator;
     }
-
-public function beforeSave($event, $entity, $options)
-{
-    //debug($entity);die();
-            $recipes_table = TableRegistry::get('Recipes'); 
-            if(is_null($entity->id)){
-                $recipe=$recipes_table->find('list')->where(['recipes_name' =>$entity->recipes_name])->count();
-            }else{
-            $recipe=$recipes_table->find('list')->where(['recipes_name'=>$entity->recipes_name,'id !=' =>$entity->id])->count();
-            }
-            if($recipe > 0)
-            {
-            return false;
-            }
-            
-} 
 }

@@ -26,6 +26,10 @@ class RecipesController extends AppController
         
         $recipes = $this->paginate($this->Recipes);
         $this->paginate['order']=['id'=>'DESC'];
+       // $this->set(compact('recipes'));
+        
+        //$this->set('recipes', $this->paginate($this->Recipes));
+        $this->set('_serialize', ['recipes']);
         $this->set(compact('recipes'));
     }
 

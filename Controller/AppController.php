@@ -34,7 +34,7 @@ class AppController extends Controller
      *
      * Use this method to add common initialization code like loading components.
      *
-     * e.g. `$this->loadComponent('Security');`
+     * e.g. `$this->loadComponent('Security');
      *
      * @return void
      */

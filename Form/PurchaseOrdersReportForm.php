@@ -19,22 +19,10 @@ class purchaseOrdersReportForm extends Form
         ->addField('Amount', ['type' => 'integer']);
         
     }
-//     protected function _buildValidator(Validator $validator)
-//     {
-//         $validator->add('name', 'length', [
-//             'rule' => ['minLength', 10],
-//             'message' => 'A name is required'
-//         ])->add('email', 'format', [
-//             'rule' => 'email',
-//             'message' => 'A valid email address is required',
-//         ]);
-        
-//         return $validator;
-//     }
-    
+   
     protected function _execute(array $data)
     {
-        // Send an email.
+        
         return true;
     }
     
