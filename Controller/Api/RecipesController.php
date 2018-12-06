@@ -13,5 +13,4 @@ class RecipesController extends AppController
         ]
     ];
  
-
 }

@@ -191,40 +191,33 @@
 	//console.log(chkid);
 	}
 	}
-function calculate_amount(element){     
-	var input_box = document.getElementById(element.id);
-	console.log("element ",input_box);
 	
-	//var rate_box = document.getElementById("rate"+1);
-	//console.log("rate_box");
-	//substring qty.id, get last number
-		current_row = element.id[element.id.length -1]
-		console.log("current_row ",current_row); 	
-	if(current_row == "y" || current_row == "e"){
-		var rate_box = "";
-		if(current_row == "y"){
-			var rate_box = document.getElementById("rate");
-			var amount = input_box.value * rate_box.value;
-			console.log("rrrrrrr ",rate_box.value);
-		}else{
-			var qty_box = document.getElementById("quantity");
-			var amount = input_box.value * qty_box.value;
-		}    
-		console.log("hjhjhjh ", amount);
-		$('#amount').html(amount); 
-	}else{
-		console.log("in else");
-		current_row = element.id[element.id.length -1]
-		console.log("current_row ",current_row); 
-
-		var qty_box = document.getElementById("quantity-id"+current_row);
-		var rate_box = document.getElementById("rate-id"+current_row);
-		var amount = qty_box.value * rate_box.value;
-		console.log(amount);
-		$('#amount'+current_row).html(amount);
+function calculate_amount(element)
+{     
+	var qty = document.getElementById("quantity");
+	//console.log("vyutgughu75655555555785",qty);
+	var rate= document.getElementById("rate");
+	//console.log("jhjhjk",rate);
+   	
+	var element_id=element.id.replace(/[^0-9]/g, '');
+	//console.log("eleid",element_id);
+		
+	if(element_id=="")
+    {	
+		var amount = qty.value * rate.value;
+	    $('#amount').html(amount); 		
 	}
-	
-}
+			
+	   if(element_id>=1)
+			{
+			var rate_box = document.getElementById("rate-id"+element_id);
+			var qty_box=document.getElementById("quantity-id"+element_id);
+			
+			
+			var amount = qty_box.value * rate_box.value;
+		    $('#amount'+element_id).html(amount); 
+           }
+  }
 
 function dateComp()
   {
